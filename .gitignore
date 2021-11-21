@@ -1,0 +1,9 @@
+composer.json
+composer.lock
+composer.phar
+docker-compose.yml
+moodle-feedback.code-workspace
+notizen.md
+vendor/*
+*.xml
+launch.json
