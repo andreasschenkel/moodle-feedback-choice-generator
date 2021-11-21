@@ -27,8 +27,10 @@ class helper
           return $htmloutput;
      }
 
-
-
+     /**
+      * @param $xmlWriterPlus      
+      * @param int $itemnumber     The number of the actual xml-component to be generated
+      */
      function generateDocumentHeader($xmlWriterPlus, $itemnumber)
      {
           $xmlWriterPlus->text("\n");
@@ -58,15 +60,9 @@ class helper
           $xmlWriterPlus->text("\n");
      }
 
-
-
-
-
-
-
-
      /**
-      * 
+      * @param $xmlWriterPlus      
+      * @param int $itemnumber     The number of the actual xml-component to be generated
       */
      function generatePagebreak($xmlWriterPlus, $itemnumber)
      {
@@ -129,6 +125,12 @@ class helper
           $xmlWriterPlus->text("\n");
      }
 
+     /**
+      * @param $xmlWriterPlus      
+      * @param int $itemnumber     The number of the actual xml-component to be generated
+      * @param int $itemnumbererstwahl Number for to reference to in the second second choice
+      * @param string $option      DEPENDVALUE
+      */
      function generateLabel($xmlWriterPlus, $itemnumber, $itemnumbererstwahl, $option)
      {
           $xmlWriterPlus->text("\n");
@@ -149,15 +151,6 @@ class helper
           $xmlWriterPlus->writeCDataElement('DEPENDVALUE', "$option");
           $xmlWriterPlus->endElement();
      }
-
-
-
-
-
-
-
-
-
 
      /**
       * 
