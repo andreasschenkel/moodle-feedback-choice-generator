@@ -1,13 +1,49 @@
+<?php session_start() ?>
+<!DOCTYPE HTML>
+<html>
+<body>
+
+
+
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
+use \DCarbone\XMLWriterPlus;
+require_once __DIR__ . '/helper.php';
 echo '<!------   Erste Zeile muss genau so aussehen              ---->' . PHP_EOL;
 echo '<!------  <?xml version="1.0" encoding="UTF-8" ?>          ---->' . PHP_EOL;
 echo '<!------  Leerzeichen zwischen " und ?                     ---->' . PHP_EOL;
+?>
 
-require_once __DIR__ . '/../vendor/autoload.php';
+<form action='generate_feedbackimport_as_xml.php' method='post'>
 
-use \DCarbone\XMLWriterPlus;
+<?php
+$option1 = trim($_POST["option1"]);
+$option2 = trim($_POST["option2"]);
+$option3 = trim($_POST["option3"]);
+$option4 = trim($_POST["option4"]);
+$option5 = trim($_POST["option5"]);
 
-require_once __DIR__ . '/helper.php';
+echo "Bisher eingegebene Optionen:<br>";
+echo '$option1 ' . $option1 . "<br>";
+echo '$option2 ' . $option2 . "<br>";
+echo '$option3 ' . $option3 . "<br>";
+echo '$option4 ' . $option4 . "<br>";
+echo '$option5 ' . $option5 . "<br>";
+
+
+echo "<p>Option 1:<input name='option1' value='$option1'></p>";
+echo "<p>Option 2:<input name='option2' value='$option2'></p>";
+echo "<p>Option 3:<input name='option3' value='$option3'></p>";
+echo "<p>Option 4:<input name='option4' value='$option4'></p>";
+echo "<p>Option 5:<input name='option5' value='$option5'></p>";
+echo "<p><input type='submit'>";
+echo "    <input type='reset'>";
+echo "</p>";
+echo "</form>";
+echo "<br>";echo  "<br>";
+echo 'Quellcode der Seite enthält den xml-Code ... todo: generiere xml-file';echo  "<br>";
+echo 'Fehler in erster Zeile !!!!! Leerzeichen vor ? fehlt   <?xml version=\"1.0\" encoding=\"UTF-8\" ?>';   
+
 
 $helper = new helper();
 
@@ -15,6 +51,7 @@ $helper = new helper();
  * only for testing and developing purpose some examle options
  */
 $optionsArray = ["Auswahlmöglichkeit Option 1", "Auswahlmöglichkeit Option 2", "Auswahlmöglichkeit Option 3", "Auswahlmöglichkeit Option 4",  "Auswahlmöglichkeit Option 5"];
+$optionsArray = ["$option1", "$option2", "$option3", "$option4",  "$option5"];
 
 // define the itemnumber to start with (maybe later I will set it to 1 instead of 680)
 $itemnumber = 367;
