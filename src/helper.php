@@ -31,8 +31,27 @@ class helper
       * @param $xmlWriterPlus      
       * @param int $itemnumber     The number of the actual xml-component to be generated
       */
-     function generateDocumentHeader($xmlWriterPlus, $itemnumber)
+     function generateDocumentHeader($xmlWriterPlus, $itemnumber, $exportpath, $filename)
      {
+
+          $exportfile = "$exportpath/$filename" . ".xml";
+          $xmlWriterPlus->openMemory();
+          if ($filename !== "") {
+               $xmlWriterPlus->openURI($exportfile);
+          } else {
+               $xmlWriterPlus->openMemory();
+          }
+
+          $xmlWriterPlus->startDocument();
+          $xmlWriterPlus->startElement('FEEDBACK');
+          $xmlWriterPlus->startAttribute('VERSION');
+          $xmlWriterPlus->text('200701');
+          $xmlWriterPlus->endAttribute();
+          $xmlWriterPlus->startAttribute('COMMENT');
+          $xmlWriterPlus->text('XML-Importfile for mod/feedback');
+          $xmlWriterPlus->endAttribute();
+          $xmlWriterPlus->startElement('ITEMS');
+
           $xmlWriterPlus->text("\n");
           $xmlWriterPlus->startElement('ITEM');
           $xmlWriterPlus->startAttribute('TYPE');

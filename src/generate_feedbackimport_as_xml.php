@@ -6,7 +6,6 @@ require_once __DIR__ . '/helper.php';
 use \DCarbone\XMLWriterPlus;
 ?>
 
-
 <!DOCTYPE HTML>
 <html>
 
@@ -26,19 +25,27 @@ use \DCarbone\XMLWriterPlus;
           if ($size === '') {
                $size = 5;
           }
+
+          $filename = trim($_POST["filename"]);
+
+
           // Setzen der Inhalte in die Felder
           for ($i = 1; $i <= (int)$size; $i++) {
                $_SESSION['option'][$i] = trim($_POST["option$i"]);
           }
 
+          echo "<h2>1. Wahl und 2. Wahl</h2>";
+          echo "<h3>Ein Generator für die Aktivität Feedback</h3>";
+
           // Anzahl der Eingabefelder
-          echo "<p>How many Options 3-10:<input name='size' value='$size'></p>";
+          echo "<p>Anzahl der Optionen: <input name='size' value='$size'></p>";
+          // Dateiname, falls export in Datei gewünscht
+          echo "<p>Dateiname (wenn leer, dann wird in die HTML-Seite generiert): <input name='filename' value='$filename'>.xml</p>";
 
           // Die gewünschte Anzahl der Eingabefelder anlegen
           for ($i = 1; $i <= (int)$size; $i++) {
-               //auslesen der Werte
                $option_i = $_SESSION['option'][$i];
-               echo "Option $i:<input name='option$i' value='$option_i'></br>";
+               echo "Option $i: <input name='option$i' value='$option_i'></br>";
           }
 
           echo "<p><input type='submit' value='Generiere XML'>";
@@ -49,25 +56,23 @@ use \DCarbone\XMLWriterPlus;
 
           if (!isset($_SESSION['visited'])) {
                $_SESSION['visited'] = true;
-               echo "Session wurde neu begonnen.";
+               echo "Session wurde neu begonnen.<br><br>";
           } else {
-               //echo "bestehende Session genutzt";
-               echo "<a href='reset.php'>Session zurücksetzen</a>";
-               echo  "<br>";
+               echo "<a href='reset.php'>Session zurücksetzen</a><br><br>";
+          }
+          if ($filename !== '') {
+               $exportfile = "../exports/$filename" . ".xml";
+               echo "<a href='$exportfile'>Generierte Datei anzeigen oder download</a><br>";
+          } else {
+               echo 'Der xml-Quellcode wurde in diese HTML-Seite hineingeneriert und kann über "Quellcode anzeigen" in eine Datei kopiert und als xml-File gespeichert werden.<br><br>';
+               echo 'Fehler in erster Zeile !!!!! Leerzeichen vor ? fehlt   <?xml version=\"1.0\" encoding=\"UTF-8\" ?><br><br>';
           }
 
-          echo  "<br>";
-          echo 'Quellcode der Seite enthält den xml-Code ... todo: generiere xml-file';
-          echo  "<br>";
-          echo 'Fehler in erster Zeile !!!!! Leerzeichen vor ? fehlt   <?xml version=\"1.0\" encoding=\"UTF-8\" ?>';
-
+          echo '<textarea id="textarea" name="textarea" rows="50" cols="100">';
           $helper = new helper();
 
-          /**
-           * only for testing and developing purpose some examle options
-           */
-          //$optionsArray = ["Auswahlmöglichkeit Option 1", "Auswahlmöglichkeit Option 2", "Auswahlmöglichkeit Option 3", "Auswahlmöglichkeit Option 4",  "Auswahlmöglichkeit Option 5"];
-
+          // only for testing and developing purpose some examle options
+          // $optionsArray = ["Auswahlmöglichkeit Option 1", "Auswahlmöglichkeit Option 2", "Auswahlmöglichkeit Option 3", "Auswahlmöglichkeit Option 4",  "Auswahlmöglichkeit Option 5"];
           $optionsArray = $_SESSION['option'];
 
           // define the itemnumber to start with (maybe later I will set it to 1 instead of 680)
@@ -76,20 +81,14 @@ use \DCarbone\XMLWriterPlus;
           // we need $itemnumberFirstChoice as reference for the second choice
           $itemnumberFirstChoice = $itemnumber + 1;
 
-          // A. head of document
-          $xmlWriterPlus = new XMLWriterPlus();
-          $xmlWriterPlus->openMemory();
-          $xmlWriterPlus->startDocument();
-          $xmlWriterPlus->startElement('FEEDBACK');
-          $xmlWriterPlus->startAttribute('VERSION');
-          $xmlWriterPlus->text('200701');
-          $xmlWriterPlus->endAttribute();
-          $xmlWriterPlus->startAttribute('COMMENT');
-          $xmlWriterPlus->text('XML-Importfile for mod/feedback');
-          $xmlWriterPlus->endAttribute();
-          $xmlWriterPlus->startElement('ITEMS');
+          $exportpath = "../exports/";
 
-          $helper->generateDocumentHeader($xmlWriterPlus, $itemnumber);
+
+          $xmlWriterPlus = new XMLWriterPlus();
+
+
+          // A. head of document
+          $helper->generateDocumentHeader($xmlWriterPlus, $itemnumber, $exportpath, $filename);
 
           // B. generate first choice
           $selectedoption = "alleOptionenNutzenFürErstwahl"; // bei der erstwahl ist keine auswahl vorhanden, also werden dann einfach alle genutzt
@@ -126,4 +125,16 @@ use \DCarbone\XMLWriterPlus;
           $xmlWriterPlus->endElement(); // Items
           $xmlWriterPlus->endElement(); // Feedback
 
-          echo $xmlWriterPlus->outputMemory();
+          if ($filename !== '') {
+               $xmlWriterPlus->flush();
+          } else {
+               echo $xmlWriterPlus->outputMemory();
+          }
+
+
+          ?>
+
+</textarea>         
+</body>
+
+</html>
