@@ -7,9 +7,7 @@ generates the xml-code for the moodle feedback activity to be used as a first an
 
 The options have to be entered directly in the file.
 
-![image](https://user-images.githubusercontent.com/31856043/142852012-b748d652-c6bc-4a97-befe-207a1617e1bc.png)
-
-![image](https://user-images.githubusercontent.com/31856043/142852196-754b3c23-3edf-4c13-be00-a28af563d1fd.png)
+![image](https://user-images.githubusercontent.com/31856043/142907001-fda899b3-c9ca-443a-9e42-92b719e641ea.png)
 
 
 # Known bugs:
@@ -25,6 +23,9 @@ correct: <?xml version="1.0" encoding="UTF-8" ?>
 
 
 # Version:
+[[v2.1.0]]
+- supports export into textarea or into file
+
 [[v2.0.0]]
 - support of usage with webserver
 - reset-option
