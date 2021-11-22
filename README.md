@@ -25,7 +25,13 @@ correct: <?xml version="1.0" encoding="UTF-8" ?>
 
 
 # Version:
-[[v1.0.0]] first version to start without webserver
+[[v2.0.0]]
+- support of usage with webserver
+- reset-option
+- use as many options as needed
+
+[[v1.0.0]] 
+first version to start without webserver
 
 
 

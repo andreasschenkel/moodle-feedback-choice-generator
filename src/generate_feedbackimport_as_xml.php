@@ -1,112 +1,129 @@
-<?php session_start() ?>
-<!DOCTYPE HTML>
-<html>
-<body>
+<?php session_start();
 
-
-
-<?php
 require_once __DIR__ . '/../vendor/autoload.php';
-use \DCarbone\XMLWriterPlus;
 require_once __DIR__ . '/helper.php';
-echo '<!------   Erste Zeile muss genau so aussehen              ---->' . PHP_EOL;
-echo '<!------  <?xml version="1.0" encoding="UTF-8" ?>          ---->' . PHP_EOL;
-echo '<!------  Leerzeichen zwischen " und ?                     ---->' . PHP_EOL;
+
+use \DCarbone\XMLWriterPlus;
 ?>
 
-<form action='generate_feedbackimport_as_xml.php' method='post'>
 
-<?php
-$option1 = trim($_POST["option1"]);
-$option2 = trim($_POST["option2"]);
-$option3 = trim($_POST["option3"]);
-$option4 = trim($_POST["option4"]);
-$option5 = trim($_POST["option5"]);
+<!DOCTYPE HTML>
+<html>
 
-echo "Bisher eingegebene Optionen:<br>";
-echo '$option1 ' . $option1 . "<br>";
-echo '$option2 ' . $option2 . "<br>";
-echo '$option3 ' . $option3 . "<br>";
-echo '$option4 ' . $option4 . "<br>";
-echo '$option5 ' . $option5 . "<br>";
+<body>
+
+     <?php
+     echo '<!------   Erste Zeile muss genau so aussehen              ---->' . PHP_EOL;
+     echo '<!------  <?xml version="1.0" encoding="UTF-8" ?>          ---->' . PHP_EOL;
+     echo '<!------  Leerzeichen zwischen " und ?                     ---->' . PHP_EOL;
+
+     ?>
+
+     <form action='generate_feedbackimport_as_xml.php' method='post'>
+
+          <?php
+          $size = trim($_POST["size"]);
+          if ($size === '') {
+               $size = 5;
+          }
+          // Setzen der Inhalte in die Felder
+          for ($i = 1; $i <= (int)$size; $i++) {
+               $_SESSION['option'][$i] = trim($_POST["option$i"]);
+          }
+
+          // Anzahl der Eingabefelder
+          echo "<p>How many Options 3-10:<input name='size' value='$size'></p>";
+
+          // Die gewünschte Anzahl der Eingabefelder anlegen
+          for ($i = 1; $i <= (int)$size; $i++) {
+               //auslesen der Werte
+               $option_i = $_SESSION['option'][$i];
+               echo "Option $i:<input name='option$i' value='$option_i'></br>";
+          }
+
+          echo "<p><input type='submit' value='Generiere XML'>";
+          echo "</p>";
+          echo "</form>";
+          echo "<br>";
 
 
-echo "<p>Option 1:<input name='option1' value='$option1'></p>";
-echo "<p>Option 2:<input name='option2' value='$option2'></p>";
-echo "<p>Option 3:<input name='option3' value='$option3'></p>";
-echo "<p>Option 4:<input name='option4' value='$option4'></p>";
-echo "<p>Option 5:<input name='option5' value='$option5'></p>";
-echo "<p><input type='submit'>";
-echo "    <input type='reset'>";
-echo "</p>";
-echo "</form>";
-echo "<br>";echo  "<br>";
-echo 'Quellcode der Seite enthält den xml-Code ... todo: generiere xml-file';echo  "<br>";
-echo 'Fehler in erster Zeile !!!!! Leerzeichen vor ? fehlt   <?xml version=\"1.0\" encoding=\"UTF-8\" ?>';   
+          if (!isset($_SESSION['visited'])) {
+               $_SESSION['visited'] = true;
+               echo "Session wurde neu begonnen.";
+          } else {
+               //echo "bestehende Session genutzt";
+               echo "<a href='reset.php'>Session zurücksetzen</a>";
+               echo  "<br>";
+          }
 
+          echo  "<br>";
+          echo 'Quellcode der Seite enthält den xml-Code ... todo: generiere xml-file';
+          echo  "<br>";
+          echo 'Fehler in erster Zeile !!!!! Leerzeichen vor ? fehlt   <?xml version=\"1.0\" encoding=\"UTF-8\" ?>';
 
-$helper = new helper();
+          $helper = new helper();
 
-/**
- * only for testing and developing purpose some examle options
- */
-$optionsArray = ["Auswahlmöglichkeit Option 1", "Auswahlmöglichkeit Option 2", "Auswahlmöglichkeit Option 3", "Auswahlmöglichkeit Option 4",  "Auswahlmöglichkeit Option 5"];
-$optionsArray = ["$option1", "$option2", "$option3", "$option4",  "$option5"];
+          /**
+           * only for testing and developing purpose some examle options
+           */
+          //$optionsArray = ["Auswahlmöglichkeit Option 1", "Auswahlmöglichkeit Option 2", "Auswahlmöglichkeit Option 3", "Auswahlmöglichkeit Option 4",  "Auswahlmöglichkeit Option 5"];
 
-// define the itemnumber to start with (maybe later I will set it to 1 instead of 680)
-$itemnumber = 367;
+          $optionsArray = $_SESSION['option'];
 
-// we need $itemnumberFirstChoice as reference for the second choice
-$itemnumberFirstChoice = $itemnumber + 1;
+          // define the itemnumber to start with (maybe later I will set it to 1 instead of 680)
+          $itemnumber = 367;
 
-// A. head of document
-$xmlWriterPlus = new XMLWriterPlus();
-$xmlWriterPlus->openMemory();
-$xmlWriterPlus->startDocument();
-$xmlWriterPlus->startElement('FEEDBACK');
-$xmlWriterPlus->startAttribute('VERSION');
-$xmlWriterPlus->text('200701');
-$xmlWriterPlus->endAttribute();
-$xmlWriterPlus->startAttribute('COMMENT');
-$xmlWriterPlus->text('XML-Importfile for mod/feedback');
-$xmlWriterPlus->endAttribute();
-$xmlWriterPlus->startElement('ITEMS');
+          // we need $itemnumberFirstChoice as reference for the second choice
+          $itemnumberFirstChoice = $itemnumber + 1;
 
-$helper->generateDocumentHeader($xmlWriterPlus, $itemnumber);
+          // A. head of document
+          $xmlWriterPlus = new XMLWriterPlus();
+          $xmlWriterPlus->openMemory();
+          $xmlWriterPlus->startDocument();
+          $xmlWriterPlus->startElement('FEEDBACK');
+          $xmlWriterPlus->startAttribute('VERSION');
+          $xmlWriterPlus->text('200701');
+          $xmlWriterPlus->endAttribute();
+          $xmlWriterPlus->startAttribute('COMMENT');
+          $xmlWriterPlus->text('XML-Importfile for mod/feedback');
+          $xmlWriterPlus->endAttribute();
+          $xmlWriterPlus->startElement('ITEMS');
 
-// B. generate first choice
-$selectedoption = "alleOptionenNutzenFürErstwahl"; // bei der erstwahl ist keine auswahl vorhanden, also werden dann einfach alle genutzt
-$level = 1; // first selectionoverview with all options
-$helper->generateSelectionOverview(
-     $level,
-     $xmlWriterPlus,
-     ++$itemnumber,
-     $itemnumberFirstChoice,
-     $helper->generateOptionsList($optionsArray, $selectedoption),
-     $option
-);
+          $helper->generateDocumentHeader($xmlWriterPlus, $itemnumber);
 
-// C. generate pagebreak to seperate first choice
-$helper->generatePagebreak($xmlWriterPlus, ++$itemnumber);
+          // B. generate first choice
+          $selectedoption = "alleOptionenNutzenFürErstwahl"; // bei der erstwahl ist keine auswahl vorhanden, also werden dann einfach alle genutzt
+          $level = 1; // first selectionoverview with all options
+          $helper->generateSelectionOverview(
+               $level,
+               $xmlWriterPlus,
+               ++$itemnumber,
+               $itemnumberFirstChoice,
+               $helper->generateOptionsList($optionsArray, $selectedoption),
+               $option
+          );
 
-// D. generate second choice
-foreach ($optionsArray as $option) {
-     $xmlWriterPlus->text("\n");
-     $helper->generateLabel($xmlWriterPlus, ++$itemnumber, $itemnumberFirstChoice, $option);
-     $selectedoption = $option;
-     $level = 2; // second selectionoverview
-     $helper->generateSelectionOverview(
-          $level,
-          $xmlWriterPlus,
-          ++$itemnumber,
-          $itemnumberFirstChoice,
-          $helper->generateOptionsList($optionsArray, $selectedoption),
-          $option
-     );
+          // C. generate pagebreak to seperate first choice
+          $helper->generatePagebreak($xmlWriterPlus, ++$itemnumber);
 
-     $helper->generatePagebreak($xmlWriterPlus, ++$itemnumber);
-}
-$xmlWriterPlus->endElement(); // Items
-$xmlWriterPlus->endElement(); // Feedback
+          // D. generate second choice
+          foreach ($optionsArray as $option) {
+               $xmlWriterPlus->text("\n");
+               $helper->generateLabel($xmlWriterPlus, ++$itemnumber, $itemnumberFirstChoice, $option);
+               $selectedoption = $option;
+               $level = 2; // second selectionoverview
+               $helper->generateSelectionOverview(
+                    $level,
+                    $xmlWriterPlus,
+                    ++$itemnumber,
+                    $itemnumberFirstChoice,
+                    $helper->generateOptionsList($optionsArray, $selectedoption),
+                    $option
+               );
 
-echo $xmlWriterPlus->outputMemory();
+               $helper->generatePagebreak($xmlWriterPlus, ++$itemnumber);
+          }
+          $xmlWriterPlus->endElement(); // Items
+          $xmlWriterPlus->endElement(); // Feedback
+
+          echo $xmlWriterPlus->outputMemory();
