@@ -7,6 +7,10 @@ generates the xml-code for the moodle feedback activity to be used as a first an
 
 The options have to be entered directly in the file.
 
+![image](https://user-images.githubusercontent.com/31856043/142852012-b748d652-c6bc-4a97-befe-207a1617e1bc.png)
+
+![image](https://user-images.githubusercontent.com/31856043/142852196-754b3c23-3edf-4c13-be00-a28af563d1fd.png)
+
 
 # Known bugs:
 The generated code is missing on space in the first line:
@@ -21,7 +25,13 @@ correct: <?xml version="1.0" encoding="UTF-8" ?>
 
 
 # Version:
-[[v1.0.0]] first version to start without webserver
+[[v2.0.0]]
+- support of usage with webserver
+- reset-option
+- use as many options as needed
+
+[[v1.0.0]] 
+first version to start without webserver
 
 
 
