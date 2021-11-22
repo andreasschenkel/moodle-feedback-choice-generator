@@ -7,7 +7,9 @@ generates the xml-code for the moodle feedback activity to be used as a first an
 
 The options have to be entered directly in the file.
 
-![image](https://user-images.githubusercontent.com/31856043/142851786-a7100257-b039-4eaf-8757-b286e7a7077a.png)
+![image](https://user-images.githubusercontent.com/31856043/142852012-b748d652-c6bc-4a97-befe-207a1617e1bc.png)
+
+![image](https://user-images.githubusercontent.com/31856043/142852196-754b3c23-3edf-4c13-be00-a28af563d1fd.png)
 
 
 # Known bugs:
